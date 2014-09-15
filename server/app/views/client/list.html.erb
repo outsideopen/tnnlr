@@ -1,6 +1,11 @@
 <h1>Assigned Ports</h1>
 
 <table>
+  <tr>
+    <th>Hostname</th>
+    <th>Tunnel Port</th>
+    <th>Last Report Time</th>
+  </tr>
   <% @clients.each do |c| %>
     <tr>
       <td><%= c.hostname %></td>
