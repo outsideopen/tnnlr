@@ -1,6 +1,6 @@
 #!/bin/bash
 
-remote='localhost'
+remote=$1
 host=`hostname`
 call="request_port/$host"
 

@@ -14,11 +14,11 @@
 ActiveRecord::Schema.define(version: 20140915214623) do
 
   create_table "clients", force: true do |t|
-    t.string "hostname"
-    t.string "outside_ip"
-    t.string "local_ip"
-    t.string "port"
-    t.date   "last_report"
+    t.string   "hostname"
+    t.string   "outside_ip"
+    t.string   "local_ip"
+    t.string   "port"
+    t.datetime "last_report"
   end
 
 end

@@ -5,7 +5,7 @@ class CreateClients < ActiveRecord::Migration
       t.string :outside_ip
       t.string :local_ip
       t.string :port
-      t.date :last_report
+      t.datetime :last_report
     end
   end
 end
