@@ -1,0 +1,22 @@
+#!/bin/bash
+
+remote='localhost'
+host=`hostname`
+call="request_port/$host"
+
+api_response=''
+
+api_call () {
+  api_response=`curl -s $remote:3000/a/$call`
+}
+
+api_call
+echo $api_response
+
+lines=`ps aux | grep $api_response | wc -l`
+
+if [ $lines -eq 1 ]
+then
+  echo 'Restarting tunnel...'
+  screen -dmS proxy ssh -R $api_response:localhost:22 $remote
+fi
