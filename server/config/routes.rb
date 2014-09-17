@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
   # views
-  get '/', to: 'client#list'
+  get '/', to: 'clients#list'
+  get '/release/:id', to: 'clients#release', as: 'release'
 
   # api
-  get '/a/request_port/:hostname', to: 'client#request_port'
+  get '/a/request_port/:hostname', to: 'clients#request_port'
 end

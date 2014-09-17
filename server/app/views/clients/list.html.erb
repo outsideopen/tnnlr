@@ -15,6 +15,7 @@
       <td><%= c.last_report %></td>
       <td><%= c.local_ip %></td>
       <td><%= c.outside_ip %></td>
+      <td><%= link_to 'Release Port', release_path(c), data: { confirm: 'Are you sure?' }, method: :delete %></td>
     </tr>
   <% end %>
 </table>

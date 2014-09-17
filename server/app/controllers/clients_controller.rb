@@ -1,4 +1,4 @@
-class ClientController < ActionController::Base
+class ClientsController < ActionController::Base
   def list
     @clients = Client.all
   end
@@ -18,5 +18,11 @@ class ClientController < ActionController::Base
     else
       raise :hell
     end
+  end
+
+  def release
+    client = Client.find(params[:id])
+    client.destroy
+    redirect_to '/'
   end
 end

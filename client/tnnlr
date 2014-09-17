@@ -19,7 +19,7 @@ api_call () {
 }
 
 api_call
-echo $api_response
+# echo $api_response
 
 lines=`ps aux | grep $api_response | wc -l`
 
