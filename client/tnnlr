@@ -15,8 +15,6 @@ get_ips () {
 
 api_call () {
   get_ips
-  echo $local_ip
-  echo $outside_ip
   api_response=`curl -s $remote:3000/a/$call?local_ip=$local_ip\&outside_ip=$outside_ip`
 }
 
