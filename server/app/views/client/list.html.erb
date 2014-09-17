@@ -5,12 +5,16 @@
     <th>Hostname</th>
     <th>Tunnel Port</th>
     <th>Last Report Time</th>
+    <th>Local IP(s)</th>
+    <th>Outside IP</th>
   </tr>
   <% @clients.each do |c| %>
     <tr>
       <td><%= c.hostname %></td>
       <td><%= c.port %></td>
       <td><%= c.last_report %></td>
+      <td><%= c.local_ip %></td>
+      <td><%= c.outside_ip %></td>
     </tr>
   <% end %>
 </table>
