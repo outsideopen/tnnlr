@@ -18,5 +18,5 @@ lines=`ps aux | grep $api_response | wc -l`
 if [ $lines -eq 1 ]
 then
   echo 'Restarting tunnel...'
-  screen -dmS proxy ssh -R $api_response:localhost:22 $remote
+  screen -dmS tnnl autossh -M 12399 -oPubkeyAuthentication=yes -oPasswordAuthentication=no -oLogLevel=error  -oUserKnownHostsFile=/dev/null -oStrictHostKeyChecking=no -R $api_response:localhost:22 $remote
 fi
