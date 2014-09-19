@@ -30,6 +30,7 @@ class ClientsController < ActionController::Base
       arr << "User #{params[:user]}"
       arr << "HostKeyAlias #{c.hostname}"
       arr << "Hostname webserver"
+      arr << nil
     end
 
     render text: arr.join("<br>\n")
