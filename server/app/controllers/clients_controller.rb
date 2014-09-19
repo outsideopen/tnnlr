@@ -12,12 +12,21 @@ class ClientsController < ActionController::Base
     client.last_report = Time.now
     client.local_ip = params[:local_ip]
     client.outside_ip = params[:outside_ip]
+    restart = client.restart
+    client.restart = false
 
     if client.save
-      render text: client.assign_port
+      render text: "#{client.assign_port};#{restart}"
     else
       raise :hell
     end
+  end
+
+  def restart
+    client = Client.find(params[:id])
+    client.restart = true
+    client.save
+    redirect_to '/'
   end
 
   def release
