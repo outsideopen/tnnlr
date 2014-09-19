@@ -22,6 +22,19 @@ class ClientsController < ActionController::Base
     end
   end
 
+  def configs
+    arr = []
+    Client.all.each do |c|
+      arr << "Host #{c.hostname}"
+      arr << "ProxyCommand ssh %h nc localhost #{c.port}"
+      arr << "User #{params[:user]}"
+      arr << "HostKeyAlias #{c.hostname}"
+      arr << "Hostname webserver"
+    end
+
+    render text: arr.join("<br>\n")
+  end
+
   def restart
     client = Client.find(params[:id])
     client.restart = true
