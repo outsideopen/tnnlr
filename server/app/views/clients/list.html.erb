@@ -20,3 +20,9 @@
     </tr>
   <% end %>
 </table>
+
+<h3>Generate SSH Config</h3>
+<%= form_tag '/configs', method: :get do %>
+  <%= text_field_tag 'user' %>
+  <%= submit_tag 'Submit' %>
+<% end %>

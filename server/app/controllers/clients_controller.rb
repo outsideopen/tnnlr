@@ -29,7 +29,7 @@ class ClientsController < ActionController::Base
       arr << "ProxyCommand ssh %h nc localhost #{c.port}"
       arr << "User #{params[:user]}"
       arr << "HostKeyAlias #{c.hostname}"
-      arr << "Hostname webserver"
+      arr << "Hostname #{request.host}"
       arr << nil
     end
 
