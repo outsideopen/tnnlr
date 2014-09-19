@@ -35,7 +35,6 @@ if [ $lines -eq 1 -o $restart == 'true' ]
 then
   echo 'Killing old screen...'
   screen -X -S tnnl quit # clean up any existing tunnels
-  # sleep 30
   echo 'Restarting tunnel...'
   screen -dmS tnnl autossh -M 12399 -oPubkeyAuthentication=yes -oPasswordAuthentication=no -oLogLevel=error  -oUserKnownHostsFile=/dev/null -oStrictHostKeyChecking=no -R $port:localhost:22 $remote
 fi
