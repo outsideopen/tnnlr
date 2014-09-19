@@ -5,5 +5,5 @@ Rails.application.routes.draw do
   get '/restart/:id', to: 'clients#restart', as: 'restart'
 
   # api
-  get '/a/request_port/:hostname', to: 'clients#request_port'
+  get '/a/request_port/:hostname', to: 'clients#request_port', :constraints => { :hostname => /[\w+\.]+/ }
 end
