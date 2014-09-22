@@ -11,7 +11,7 @@
 <h4>Modifying the settings below will restart any existing SSH tunnels</h4>
 
 <%= form_for @client do |f| %>
-  <label>User to SSH as
-  <%= f.text_field :user %>
+  <label>User to SSH as:
+  <%= f.text_field :user %></label><br>
   <%= f.submit 'Save' %>
 <% end %>

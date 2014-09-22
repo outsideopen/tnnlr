@@ -10,6 +10,14 @@ class ClientsController < ApplicationController
     @client = Client.find(params[:id])
   end
 
+  def update
+    @client = Client.find(params[:id])
+    @client.update_attributes(client_params)
+    @client.restart = true
+    @client.save
+    redirect_to '/'
+  end
+
   def request_port
     client = Client.find_or_create_by(hostname: params[:hostname])
     client.assign_port
@@ -51,5 +59,11 @@ class ClientsController < ApplicationController
     client = Client.find(params[:id])
     client.destroy
     redirect_to '/'
+  end
+
+  private
+
+  def client_params
+    params.require(:client).permit(:user)
   end
 end
