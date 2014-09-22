@@ -21,16 +21,17 @@ api_call () {
 
 # Parse response
 api_call
-# echo "$api_response"
 set -- "$api_response" 
 IFS=";"; declare -a Array=($*) 
 port="${Array[0]}"
 restart="${Array[1]}" 
 user="${Array[2]}"
+update_configs="${Array[3]}"
 
 echo "Port given: $port"
 echo "Restart: $restart"
 echo "User: $user"
+echo "Update SSH Config: $update_configs"
 
 # See if the server is running
 lines=`ps aux | grep $port | wc -l`
@@ -41,4 +42,11 @@ then
   screen -X -S tnnl quit # clean up any existing tunnels
   echo 'Restarting tunnel...'
   screen -dmS tnnl autossh -M 12399 -oPubkeyAuthentication=yes -oPasswordAuthentication=no -oLogLevel=error  -oUserKnownHostsFile=/dev/null -oStrictHostKeyChecking=no -R $port:localhost:22 $user@$remote
+fi
+
+if [ $update_configs == 'true' ]
+then
+  echo 'Updating SSH Configs'
+  sed -i.bak '/#tnnlr/,+999 d' ~/.ssh/config
+  curl -s $remote:3000/configs?user=$user >> ~/.ssh/config
 fi
