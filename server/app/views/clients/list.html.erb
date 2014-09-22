@@ -24,6 +24,7 @@
 
 <h3>Generate SSH Config</h3>
 <%= form_tag '/configs' do %>
-  <%= text_field_tag 'user' %>
+  <label>User to SSH as: 
+  <%= text_field_tag 'user' %></label>
   <%= submit_tag 'Submit' %>
 <% end %>

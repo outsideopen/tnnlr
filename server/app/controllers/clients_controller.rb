@@ -39,14 +39,14 @@ class ClientsController < ApplicationController
     arr = []
     Client.all.each do |c|
       arr << "Host #{c.hostname}"
-      arr << "ProxyCommand ssh %h nc localhost #{c.port}"
-      arr << "User #{params[:user]}"
-      arr << "HostKeyAlias #{c.hostname}"
-      arr << "Hostname #{request.host}"
+      arr << "  ProxyCommand ssh %h nc localhost #{c.port}"
+      arr << "  User #{params[:user]}"
+      arr << "  HostKeyAlias #{c.hostname}"
+      arr << "  Hostname #{request.host}"
       arr << nil
     end
 
-    render text: arr.join("<br>\n")
+    render plain: arr.join("\n")
   end
 
   def restart
