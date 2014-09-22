@@ -13,5 +13,7 @@
 <%= form_for @client do |f| %>
   <label>User to SSH as:
   <%= f.text_field :user %></label><br>
+  <label>Keep client SSH configs up to date:
+  <%= f.check_box :update_configs %></label><br>
   <%= f.submit 'Save' %>
 <% end %>

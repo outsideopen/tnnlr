@@ -46,7 +46,7 @@ fi
 
 if [ $update_configs == 'true' ]
 then
-  echo 'Updating SSH Configs'
+  echo 'Updating SSH configs...'
   sed -i.bak '/#tnnlr/,+999 d' ~/.ssh/config
   curl -s $remote:3000/configs?user=$user >> ~/.ssh/config
 fi

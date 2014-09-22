@@ -65,6 +65,6 @@ class ClientsController < ApplicationController
   private
 
   def client_params
-    params.require(:client).permit(:user)
+    params.require(:client).permit(:user, :update_configs)
   end
 end
