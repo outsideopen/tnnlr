@@ -15,18 +15,22 @@ get_ips () {
 
 api_call () {
   get_ips
-  api_response=`curl -s $remote:3000/a/$call?local_ip=$local_ip\&outside_ip=$outside_ip`
+  user=`whoami`
+  api_response=`curl -s $remote:3000/a/$call?local_ip=$local_ip\&outside_ip=$outside_ip\&user=$user`
 }
 
 # Parse response
 api_call
+# echo "$api_response"
 set -- "$api_response" 
 IFS=";"; declare -a Array=($*) 
 port="${Array[0]}"
 restart="${Array[1]}" 
+user="${Array[2]}"
 
 echo "Port given: $port"
 echo "Restart: $restart"
+echo "User: $user"
 
 # See if the server is running
 lines=`ps aux | grep $port | wc -l`
@@ -36,5 +40,5 @@ then
   echo 'Killing old screen...'
   screen -X -S tnnl quit # clean up any existing tunnels
   echo 'Restarting tunnel...'
-  screen -dmS tnnl autossh -M 12399 -oPubkeyAuthentication=yes -oPasswordAuthentication=no -oLogLevel=error  -oUserKnownHostsFile=/dev/null -oStrictHostKeyChecking=no -R $port:localhost:22 $remote
+  screen -dmS tnnl autossh -M 12399 -oPubkeyAuthentication=yes -oPasswordAuthentication=no -oLogLevel=error  -oUserKnownHostsFile=/dev/null -oStrictHostKeyChecking=no -R $port:localhost:22 $user@$remote
 fi

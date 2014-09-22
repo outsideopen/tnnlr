@@ -24,11 +24,12 @@ class ClientsController < ApplicationController
     client.last_report = Time.now
     client.local_ip = params[:local_ip]
     client.outside_ip = params[:outside_ip]
+    client.user = params[:user] if client.user.nil?
     restart = client.restart
     client.restart = false
 
     if client.save
-      render text: "#{client.assign_port};#{restart}"
+      render text: "#{client.assign_port};#{restart};#{client.user}"
     else
       raise :hell
     end
