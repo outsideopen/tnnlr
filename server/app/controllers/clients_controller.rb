@@ -29,14 +29,14 @@ class ClientsController < ApplicationController
     client.restart = false
 
     if client.save
-      render text: "#{client.assign_port};#{restart};#{client.user}"
+      render text: "#{client.assign_port};#{restart};#{client.user};#{client.update_configs}"
     else
       raise :hell
     end
   end
 
   def configs
-    arr = []
+    arr = ['#tnnlr - keep this at the bottom']
     Client.all.each do |c|
       arr << "Host #{c.hostname}"
       arr << "  ProxyCommand ssh %h nc localhost #{c.port}"

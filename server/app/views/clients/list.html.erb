@@ -23,7 +23,7 @@
 </table>
 
 <h3>Generate SSH Config</h3>
-<%= form_tag '/configs' do %>
+<%= form_tag '/configs', method: :get do %>
   <label>User to SSH as: 
   <%= text_field_tag 'user' %></label>
   <%= submit_tag 'Submit' %>

@@ -7,6 +7,7 @@ class CreateClients < ActiveRecord::Migration
       t.string :port
       t.string :user
       t.boolean :restart, default: false
+      t.boolean :update_configs, default: false
       t.datetime :last_report
     end
   end
