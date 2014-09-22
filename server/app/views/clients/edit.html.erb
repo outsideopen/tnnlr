@@ -1,0 +1,17 @@
+<h1>Client Settings</h1>
+
+<h4>These settings cannot be modified</h4>
+<p>
+<strong>Hostname: </strong>
+<%= @client.hostname %><br>
+<strong>Port: </strong>
+<%= @client.port %>
+</p>
+
+<h4>Modifying the settings below will restart any existing SSH tunnels</h4>
+
+<%= form_for @client do |f| %>
+  <label>User to SSH as
+  <%= f.text_field :user %>
+  <%= f.submit 'Save' %>
+<% end %>

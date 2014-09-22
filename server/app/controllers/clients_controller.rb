@@ -1,9 +1,13 @@
-class ClientsController < ActionController::Base
+class ClientsController < ApplicationController
   def list
     @clients = Client.all
   end
 
   def ping
+  end
+
+  def edit
+    @client = Client.find(params[:id])
   end
 
   def request_port
@@ -43,7 +47,7 @@ class ClientsController < ActionController::Base
     redirect_to '/'
   end
 
-  def release
+  def destroy
     client = Client.find(params[:id])
     client.destroy
     redirect_to '/'
