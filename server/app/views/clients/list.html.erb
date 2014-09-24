@@ -17,7 +17,7 @@
       <td><%= c.outside_ip %></td>
       <td><%= link_to 'Release Port', c, data: { confirm: 'Are you sure? This will delete the client and any settings it has.' }, method: :delete %></td>
       <td><%= link_to 'Force Restart', restart_path(c), data: { confirm: 'Are you sure? This will kill any open SSH sessions.' } %></td>
-      <td><%= link_to 'Settings', edit_client_path(c) %></td>
+      <td><%= link_to 'View', edit_client_path(c) %></td>
     </tr>
   <% end %>
 </table>

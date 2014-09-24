@@ -8,6 +8,15 @@
 <%= @client.port %>
 </p>
 
+<p><strong>w:</strong><br>
+<code><%= @client.uptime.gsub("\n", '<br>').html_safe %></code></p>
+
+<p><strong>df -h:</strong><br>
+<code><%= @client.dfh.gsub("\n", '<br>').html_safe %></code></p>
+
+<p><strong>free -m:</strong><br>
+<code><%= @client.free.gsub("\n", '<br>').html_safe %></code></p>
+
 <h4>Modifying the settings below will restart any existing SSH tunnels</h4>
 
 <%= form_for @client do |f| %>

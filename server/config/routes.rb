@@ -6,5 +6,5 @@ Rails.application.routes.draw do
   resources :clients, only: ['edit', 'update', 'destroy']
 
   # api
-  get '/a/request_port/:hostname', to: 'clients#request_port', :constraints => { :hostname => /[\w+\.]+/ }
+  post '/a/request_port/:hostname', to: 'clients#request_port', :constraints => { :hostname => /[\w+\.]+/ }
 end

@@ -5,9 +5,9 @@ host=`hostname`
 call="request_port/$host"
 
 api_response=''
+
 local_ip=''
 outside_ip=''
-
 get_ips () {
   local_ip=`/sbin/ifconfig | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p' | tr '\n' ','`
   outside_ip=`curl -s ifconfig.io`
@@ -15,8 +15,11 @@ get_ips () {
 
 api_call () {
   get_ips
+  dfh=`df -h | sed -e 's:%::g'` # percents break ruby :)
+  uptime=`w`
+  free=`free -m`  
   user=`whoami`
-  api_response=`curl -s --data "local_ip=$local_ip\&outside_ip=$outside_ip\&user=$user" $remote:3000/a/$call`
+  api_response=`curl -s --data "local_ip=$local_ip&outside_ip=$outside_ip&user=$user&uptime=$uptime&dfh=$dfh&free=$free" $remote:3000/a/$call`
 }
 
 # Parse response

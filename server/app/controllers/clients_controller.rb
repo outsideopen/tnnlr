@@ -22,8 +22,7 @@ class ClientsController < ApplicationController
     client = Client.find_or_create_by(hostname: params[:hostname])
     client.assign_port
     client.last_report = Time.now
-    client.local_ip = params[:local_ip]
-    client.outside_ip = params[:outside_ip]
+    client.update_attributes(api_params)
     client.user = params[:user] if client.user.nil?
     restart = client.restart
     client.restart = false
@@ -66,5 +65,9 @@ class ClientsController < ApplicationController
 
   def client_params
     params.require(:client).permit(:user, :update_configs)
+  end
+
+  def api_params
+    params.permit(:local_ip, :outside_ip, :uptime, :dfh, :free)
   end
 end
