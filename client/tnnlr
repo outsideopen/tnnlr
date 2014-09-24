@@ -16,7 +16,7 @@ get_ips () {
 api_call () {
   get_ips
   user=`whoami`
-  api_response=`curl -s $remote:3000/a/$call?local_ip=$local_ip\&outside_ip=$outside_ip\&user=$user`
+  api_response=`curl -s --data "local_ip=$local_ip\&outside_ip=$outside_ip\&user=$user" $remote:3000/a/$call`
 }
 
 # Parse response
