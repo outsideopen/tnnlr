@@ -1,6 +1,6 @@
 <h1>Client Settings</h1>
 
-<h4>These settings cannot be modified</h4>
+<legend>System Information</legend>
 <p>
 <strong>Hostname: </strong>
 <%= @client.hostname %><br>
@@ -8,16 +8,52 @@
 <%= @client.port %>
 </p>
 
-<p><strong>w:</strong><br>
-<pre><code><%= @client.uptime.gsub("\n", '<br>').html_safe %></code></pre></p>
+<div class="panel-group" id="accordion">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+          w
+        </a>
+      </h4>
+    </div>
+    <div id="collapseOne" class="panel-collapse collapse">
+      <div class="panel-body">
+        <pre><code><%= @client.uptime.gsub("\n", '<br>').html_safe %></code></pre>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+          df -h
+        </a>
+      </h4>
+    </div>
+    <div id="collapseTwo" class="panel-collapse collapse">
+      <div class="panel-body">
+        <pre><code><%= @client.dfh.gsub("\n", '<br>').html_safe %></code></pre>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+          free -m
+        </a>
+      </h4>
+    </div>
+    <div id="collapseThree" class="panel-collapse collapse">
+      <div class="panel-body">
+        <pre><code><%= @client.free.gsub("\n", '<br>').html_safe %></code></pre>
+      </div>
+    </div>
+  </div>
+</div>
 
-<p><strong>df -h:</strong><br>
-<pre><code><%= @client.dfh.gsub("\n", '<br>').html_safe %></code></pre></p>
-
-<p><strong>free -m:</strong><br>
-<pre><code><%= @client.free.gsub("\n", '<br>').html_safe %></code></pre></p>
-
-<h4>Modifying the settings below will restart any existing SSH tunnels</h4>
+<legend>Settings <font size='1'>Changing these will restart any existing SSH tunnels</font></legend>
 
 <%= form_for @client do |f| %>
   <label>User to SSH as:

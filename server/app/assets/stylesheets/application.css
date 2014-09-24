@@ -18,3 +18,7 @@ body {
   max-width: 1000px;
   margin: 0 auto auto;
 }
+
+legend {
+  padding-top:30px;
+}
