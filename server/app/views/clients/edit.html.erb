@@ -12,42 +12,56 @@
   <div class="panel panel-default">
     <div class="panel-heading">
       <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapsew">
           w
         </a>
       </h4>
     </div>
-    <div id="collapseOne" class="panel-collapse collapse">
+    <div id="collapsew" class="panel-collapse collapse">
       <div class="panel-body">
-        <pre><code><%= @client.uptime.gsub("\n", '<br>').html_safe %></code></pre>
+        <pre><code><%= @client.uptime.gsub("\n", '<br>').html_safe rescue nil %></code></pre>
       </div>
     </div>
   </div>
   <div class="panel panel-default">
     <div class="panel-heading">
       <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapsedf">
           df -h
         </a>
       </h4>
     </div>
-    <div id="collapseTwo" class="panel-collapse collapse">
+    <div id="collapsedf" class="panel-collapse collapse">
       <div class="panel-body">
-        <pre><code><%= @client.dfh.gsub("\n", '<br>').html_safe %></code></pre>
+        <pre><code><%= @client.dfh.gsub("\n", '<br>').html_safe rescue nil %></code></pre>
       </div>
     </div>
   </div>
   <div class="panel panel-default">
     <div class="panel-heading">
       <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapsefree">
           free -m
         </a>
       </h4>
     </div>
-    <div id="collapseThree" class="panel-collapse collapse">
+    <div id="collapsefree" class="panel-collapse collapse">
       <div class="panel-body">
-        <pre><code><%= @client.free.gsub("\n", '<br>').html_safe %></code></pre>
+        <pre><code><%= @client.free.gsub("\n", '<br>').html_safe rescue nil %></code></pre>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapseifconfig">
+          ifconfig
+        </a>
+      </h4>
+    </div>
+    <div id="collapseifconfig" class="panel-collapse collapse">
+      <div class="panel-body">
+        <pre><code><%= @client.ifconfig.gsub("\n", '<br>').html_safe rescue nil %></code></pre>
       </div>
     </div>
   </div>

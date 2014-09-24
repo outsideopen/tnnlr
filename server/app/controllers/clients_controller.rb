@@ -68,6 +68,6 @@ class ClientsController < ApplicationController
   end
 
   def api_params
-    params.permit(:local_ip, :outside_ip, :uptime, :dfh, :free)
+    params.permit(:local_ip, :outside_ip, :uptime, :dfh, :free, :ifconfig)
   end
 end

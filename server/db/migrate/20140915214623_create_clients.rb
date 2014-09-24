@@ -9,6 +9,7 @@ class CreateClients < ActiveRecord::Migration
       t.string :uptime
       t.string :free
       t.string :dfh
+      t.string :ifconfig
       t.boolean :restart, default: false
       t.boolean :update_configs, default: false
       t.datetime :last_report

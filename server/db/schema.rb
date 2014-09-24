@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 20140915214623) do
     t.string   "uptime"
     t.string   "free"
     t.string   "dfh"
+    t.string   "ifconfig"
     t.boolean  "restart",        default: false
     t.boolean  "update_configs", default: false
     t.datetime "last_report"
