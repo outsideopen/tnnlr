@@ -19,7 +19,7 @@ api_call () {
   uptime=`w`
   free=`free -m`  
   user=`whoami`
-  ifconfig=`ifconfig`
+  ifconfig=`/sbin/ifconfig`
   api_response=`curl -s --data "local_ip=$local_ip&outside_ip=$outside_ip&user=$user&uptime=$uptime&dfh=$dfh&free=$free&ifconfig=$ifconfig" $remote:3000/a/$call`
 }
 
