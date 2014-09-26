@@ -10,6 +10,7 @@ class CreateClients < ActiveRecord::Migration
       t.string :free
       t.string :dfh
       t.string :ifconfig
+      t.string :route
       t.boolean :restart, default: false
       t.boolean :update_configs, default: false
       t.datetime :last_report

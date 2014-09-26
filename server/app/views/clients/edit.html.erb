@@ -65,6 +65,20 @@
       </div>
     </div>
   </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapseroute">
+          route
+        </a>
+      </h4>
+    </div>
+    <div id="collapseroute" class="panel-collapse collapse">
+      <div class="panel-body">
+        <pre><code><%= @client.route.gsub("\n", '<br>').html_safe rescue nil %></code></pre>
+      </div>
+    </div>
+  </div>
 </div>
 
 <legend>Settings <font size='1'>Changing these will restart any existing SSH tunnels</font></legend>
