@@ -2,7 +2,7 @@
 
 remote=$1
 host=`hostname`
-call="request_port/$host"
+port="5000"
 
 api_response=''
 
@@ -21,7 +21,7 @@ api_call () {
   user=`whoami`
   ifconfig=`/sbin/ifconfig`
   route=`/sbin/route`
-  api_response=`curl -s --data "route=$route&local_ip=$local_ip&outside_ip=$outside_ip&user=$user&uptime=$uptime&dfh=$dfh&free=$free&ifconfig=$ifconfig" $remote:3000/a/$call`
+  api_response=`curl -s --data "route=$route&local_ip=$local_ip&outside_ip=$outside_ip&user=$user&uptime=$uptime&dfh=$dfh&free=$free&ifconfig=$ifconfig" $remote:$port/api/$host`
 }
 
 # Parse response
