@@ -20,7 +20,7 @@ api_call () {
   free=`free -m`  
   user=`whoami`
   ifconfig=`/sbin/ifconfig`
-  route=`route`
+  route=`/sbin/route`
   api_response=`curl -s --data "route=$route&local_ip=$local_ip&outside_ip=$outside_ip&user=$user&uptime=$uptime&dfh=$dfh&free=$free&ifconfig=$ifconfig" $remote:3000/a/$call`
 }
 
