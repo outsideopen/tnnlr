@@ -45,12 +45,20 @@ def find_by_hostname(hostname):
   return con.cursor().execute("select * from Clients where hostname = '" + hostname + "'").fetchall()
 
 def find_or_update_host(hostname, request):
+  con = lite.connect('db.sqlite3')
   if len(find_by_hostname(hostname)) > 0:
-    # exists already, just update
-    print 'it exists! lets just update'
+    args = map(lambda k: k + " = '" + get_args(request, k) + "'", host_attrs)
+    command = "update Clients set " + ", ".join(args)
+    command += ", last_report = '" + str(time.now()) + "' "
+    command += "where hostname = '" + hostname + "'"
+    print command
+    con.cursor().execute(command)
+    con.commit()
   else:
-    print 'time to add a new one!'
-
+    args = map(lambda k: get_args(request, k), host_attrs)
+    command = "insert into Clients values('" + hostname + "', '" + "','".join(args) + "', 'false', 'false', '" + str(time.now()) + "')"
+    con.cursor().execute(command)
+    con.commit()
 
 
 # dat app
@@ -62,7 +70,6 @@ def index():
 
 @app.route("/api/<hostname>", methods=['POST'])
 def api(hostname):
-  args = map(lambda k: get_args(request, k), host_attrs)
   con = lite.connect('db.sqlite3')
   # command = "insert into Clients values('" + hostname + "', '" + "','".join(args) + "', 'false', 'false', '" + str(time.now()) + "')"
   # print command
