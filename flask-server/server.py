@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, render_template, redirect
 import sqlite3 as lite
 from datetime import datetime as time
+from random import randint
 
 app = Flask(__name__)
 
@@ -8,7 +9,6 @@ app = Flask(__name__)
 host_attrs = [
   "outside_ip",
   "local_ip",
-  "port",
   "user",
   "uptime",
   "free",
@@ -18,6 +18,7 @@ host_attrs = [
 ]
 
 extra_attrs = [
+  "port",
   "restart",
   "update_configs",
   "last_report"
@@ -46,7 +47,7 @@ def find_by_hostname(hostname):
 
 def find_or_update_host(hostname, request):
   con = lite.connect('db.sqlite3')
-  if len(find_by_hostname(hostname)) > 0:
+  if len(find_by_hostname(hostname)) > 0: # update
     args = map(lambda k: k + " = '" + get_args(request, k) + "'", host_attrs)
     command = "update Clients set " + ", ".join(args)
     command += ", last_report = '" + str(time.now()) + "' "
@@ -54,9 +55,9 @@ def find_or_update_host(hostname, request):
     print command
     con.cursor().execute(command)
     con.commit()
-  else:
+  else: # create
     args = map(lambda k: get_args(request, k), host_attrs)
-    command = "insert into Clients values('" + hostname + "', '" + "','".join(args) + "', 'false', 'false', '" + str(time.now()) + "')"
+    command = "insert into Clients values('" + hostname + "', '" + "','".join(args) + "', '" + str(randint(15000, 16000)) + "', 'false', 'false', '" + str(time.now()) + "')"
     con.cursor().execute(command)
     con.commit()
 
@@ -70,13 +71,11 @@ def index():
 
 @app.route("/api/<hostname>", methods=['POST'])
 def api(hostname):
-  con = lite.connect('db.sqlite3')
-  # command = "insert into Clients values('" + hostname + "', '" + "','".join(args) + "', 'false', 'false', '" + str(time.now()) + "')"
-  # print command
-  # con.cursor().execute(command)
-  # con.commit()
   find_or_update_host(hostname, request)
-  return 'HELLO'
+
+  client = find_by_hostname(hostname)[0]
+  print len(client)
+  return client[9] + ";" + client[10] + ";" + client[3] + ";" + client[11]
 
 
 # ready player one
