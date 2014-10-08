@@ -50,7 +50,7 @@ def find_or_update_host(hostname, request):
   if len(find_by_hostname(hostname)) > 0: # update
     args = map(lambda k: k + " = '" + get_args(request, k) + "'", host_attrs)
     command = "update Clients set " + ", ".join(args)
-    command += ", last_report = '" + str(time.now()) + "' "
+    command += ", last_report = '" + str(time.now()) + "', restart = 'false' "
     command += "where hostname = '" + hostname + "'"
     print command
     con.cursor().execute(command)
@@ -66,14 +66,13 @@ def find_or_update_host(hostname, request):
 @app.route("/")
 def index():
   con = lite.connect('db.sqlite3')
-  clients = con.cursor().execute("select hostname, port, last_report, local_ip, outside_ip from Clients").fetchall()
+  clients = con.cursor().execute("select hostname, port, last_report, local_ip, outside_ip, restart from Clients").fetchall()
   return render_template('index.html', clients=clients)
 
 @app.route("/api/<hostname>", methods=['POST'])
 def api(hostname):
-  find_or_update_host(hostname, request)
-
   client = find_by_hostname(hostname)[0]
+  find_or_update_host(hostname, request)
   print len(client)
   return client[9] + ";" + client[10] + ";" + client[3] + ";" + client[11]
 
@@ -84,7 +83,12 @@ def release(hostname):
   con.commit()
   return redirect('/')
 
-
+@app.route("/restart/<hostname>")
+def restart(hostname):
+  con = lite.connect('db.sqlite3')
+  clients = con.cursor().execute("update Clients set restart = 'true' where hostname = '" + hostname + "'")
+  con.commit()
+  return redirect('/')
 
 # static assets
 @app.route('/assets/<path:filename>')

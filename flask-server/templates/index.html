@@ -24,7 +24,13 @@
       <td>{{ c[3] }}</td>
       <td>{{ c[4] }}</td>
       <td><a href="/release/{{ c[0] }}">Release Port</a></td>
-      <td><a href="/restart/{{ c[0] }}">Force Restart</a></td>
+      <td>
+        {% if c[5] != 'true' %}
+          <a href="/restart/{{ c[0] }}">Force Restart</a>
+        {% else %}
+          Restarting...
+        {% endif %}
+      </td>
       <td><a href="/show/{{ c[0] }}">Show</a></td>
     </tr>
   {% endfor %}
