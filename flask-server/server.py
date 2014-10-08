@@ -77,6 +77,14 @@ def api(hostname):
   print len(client)
   return client[9] + ";" + client[10] + ";" + client[3] + ";" + client[11]
 
+@app.route("/release/<hostname>")
+def release(hostname):
+  con = lite.connect('db.sqlite3')
+  clients = con.cursor().execute("delete from Clients where hostname = '" + hostname + "'")
+  con.commit()
+  return redirect('/')
+
+
 
 # static assets
 @app.route('/assets/<path:filename>')
