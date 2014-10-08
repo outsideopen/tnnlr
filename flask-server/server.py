@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template, redirect
+from flask import Flask, request, jsonify, render_template, redirect, send_from_directory
 import sqlite3 as lite
 from datetime import datetime as time
 from random import randint
@@ -77,6 +77,11 @@ def api(hostname):
   print len(client)
   return client[9] + ";" + client[10] + ";" + client[3] + ";" + client[11]
 
+
+# static assets
+@app.route('/assets/<path:filename>')
+def send_foo(filename):
+    return send_from_directory('assets', filename)
 
 # ready player one
 app.config.update(DEBUG=True)
