@@ -1,6 +1,30 @@
 {% extends "layout.html" %}
 {% block body %}
 
-  {{clients}}
+<table class='table'>
+  <thead>
+    <tr>
+      <th>Hostname</th>
+      <th>Port</th>
+      <th>Last Report</th>
+      <th>Local IP</th>
+      <th>External IP</th>
+    </tr>
+  </thead>
+  <tbody>
+
+  {% for c in clients %}
+    <tr>
+      <td>{{ c[0] }}</td>
+      <td>{{ c[1] }}</td>
+      <td>{{ c[2] }}</td>
+      <td>{{ c[3] }}</td>
+      <td>{{ c[4] }}</td>
+    </tr>
+  {% endfor %}
+
+
+  </tbody>
+</table>
 
 {% endblock %}
