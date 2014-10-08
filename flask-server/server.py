@@ -71,8 +71,13 @@ def index():
 
 @app.route("/api/<hostname>", methods=['POST'])
 def api(hostname):
-  client = find_by_hostname(hostname)[0]
-  find_or_update_host(hostname, request)
+  try:
+    client = find_by_hostname(hostname)[0]
+    find_or_update_host(hostname, request)
+  except:
+    find_or_update_host(hostname, request)
+    client = find_by_hostname(hostname)[0]
+
   print len(client)
   return client[9] + ";" + client[10] + ";" + client[3] + ";" + client[11]
 
@@ -89,6 +94,11 @@ def restart(hostname):
   clients = con.cursor().execute("update Clients set restart = 'true' where hostname = '" + hostname + "'")
   con.commit()
   return redirect('/')
+
+@app.route("/show/<hostname>")
+def show(hostname):
+  client = find_by_hostname(hostname)[0]
+  return render_template('show.html', client=client, hostname=hostname)
 
 # static assets
 @app.route('/assets/<path:filename>')
