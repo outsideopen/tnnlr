@@ -101,15 +101,15 @@ def api(hostname):
   print len(client)
   return client[9] + ";" + client[10] + ";" + client[3] + ";" + client[11]
 
-@app.route("/api/configs/<user>")
-def configs(user):
+@app.route("/api/configs")
+def configs():
   arr = ["#tnnlr - keep this at the bottom"]
   con = lite.connect('db.sqlite3')
   clients = con.cursor().execute("select hostname, port from Clients")
   for c in clients:
     arr.append("Host " + c[0])
     arr.append("    ProxyCommand ssh %h nc localhost " + c[1])
-    arr.append("    User " + user)
+    arr.append("    User " + request.args.get('user', ''))
     arr.append("    HostKeyAlias " + c[0])
     arr.append("    Hostname " + request.host.split(':')[0])
     arr.append("")
