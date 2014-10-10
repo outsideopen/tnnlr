@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template, redirect, send_from_directory
+from flask import Flask, request, jsonify, render_template, redirect, send_from_directory, Response, request
 import sqlite3 as lite
 from datetime import datetime as time
 from random import randint
@@ -69,18 +69,6 @@ def index():
   clients = con.cursor().execute("select hostname, port, last_report, local_ip, outside_ip, restart from Clients").fetchall()
   return render_template('index.html', clients=clients)
 
-@app.route("/api/<hostname>", methods=['POST'])
-def api(hostname):
-  try:
-    client = find_by_hostname(hostname)[0]
-    find_or_update_host(hostname, request)
-  except:
-    find_or_update_host(hostname, request)
-    client = find_by_hostname(hostname)[0]
-
-  print len(client)
-  return client[9] + ";" + client[10] + ";" + client[3] + ";" + client[11]
-
 @app.route("/release/<hostname>")
 def release(hostname):
   con = lite.connect('db.sqlite3')
@@ -100,6 +88,34 @@ def show(hostname):
   client = find_by_hostname(hostname)[0]
   return render_template('show.html', client=client, hostname=hostname)
 
+# api endpoints
+@app.route("/api/<hostname>", methods=['POST'])
+def api(hostname):
+  try:
+    client = find_by_hostname(hostname)[0]
+    find_or_update_host(hostname, request)
+  except:
+    find_or_update_host(hostname, request)
+    client = find_by_hostname(hostname)[0]
+
+  print len(client)
+  return client[9] + ";" + client[10] + ";" + client[3] + ";" + client[11]
+
+@app.route("/api/configs/<user>")
+def configs(user):
+  arr = ["#tnnlr - keep this at the bottom"]
+  con = lite.connect('db.sqlite3')
+  clients = con.cursor().execute("select hostname, port from Clients")
+  for c in clients:
+    arr.append("Host " + c[0])
+    arr.append("    ProxyCommand ssh %h nc localhost " + c[1])
+    arr.append("    User " + user)
+    arr.append("    HostKeyAlias " + c[0])
+    arr.append("    Hostname " + request.host.split(':')[0])
+    arr.append("")
+
+  return Response("\n".join(arr), content_type="text/plain;charset=UTF-8")
+ 
 # static assets
 @app.route('/assets/<path:filename>')
 def send_foo(filename):
