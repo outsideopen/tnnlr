@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+{% block body %}
+<h1>this is tnnlr</h1>
+
+<table class='table'>
+  <thead>
+    <tr>
+      <th>Hostname</th>
+      <th>Port</th>
+      <th>Last Report</th>
+      <th>Local IP</th>
+      <th>External IP</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+
+  {% for c in clients %}
+    <tr>
+      <td>{{ c[0] }}</td>
+      <td>{{ c[1] }}</td>
+      <td>{{ c[2] }}</td>
+      <td>{{ c[3] }}</td>
+      <td>{{ c[4] }}</td>
+      <td><a href="/release/{{ c[0] }}">Release Port</a></td>
+      <td>
+        {% if c[5] != 'true' %}
+          <a href="/restart/{{ c[0] }}">Force Restart</a>
+        {% else %}
+          Restarting...
+        {% endif %}
+      </td>
+      <td><a href="/show/{{ c[0] }}">Show</a></td>
+    </tr>
+  {% endfor %}
+
+
+  </tbody>
+</table>
+
+<div>
+<form accept-charset="UTF-8" action="/api/configs" method="get">
+  <label>Generate SSH configs for: 
+  <input id="user" name="user" type="text"></label>
+  <input name="commit" type="submit" value="Submit">
+</form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+{% block body %}
+  <h1>look it's {{ hostname }} <a href="/" class="pull-right">go home</a></h1>
+
+  <table class="table">
+    <thead>
+      <tr><th>Field</th><th>Value</th></tr>
+    </thead>
+
+    <tbody>
+      <tr><td>Hostname</td><td>{{ client[0] }}</td></tr>
+      <tr><td>External IP</td><td>{{ client[1] }}</td></tr>
+      <tr><td>Internal IP</td><td>{{ client[2] }}</td></tr>
+      <tr><td>User</td><td>{{ client[3] }}</td></tr>
+
+      <tr><td>Port</td><td>{{ client[9] }}</td></tr>
+      <tr><td>Restart</td><td>{{ client[10] }}</td></tr>
+      <tr><td>Update Configs</td><td>{{ client[11] }} (<a href="/toggle_configs/{{ hostname }}">toggle</a>)</td></tr>
+      <tr><td>Last Report</td><td>{{ client[12] }}</td></tr>
+    </tbody>
+
+    <thead>
+      <tr><th>Command</th><th>Result</th></tr>
+    </thead>
+
+    <tbody>
+      <tr><td>w</td><td><pre><code>{{ client[4] }}</code></pre></td></tr>
+      <tr><td>free</td><td><pre><code>{{ client[5] }}</code></pre></td></tr>
+      <tr><td>df -h</td><td><pre><code>{{ client[6] }}</code></pre></td></tr>
+      <tr><td>ifconfig</td><td><pre><code>{{ client[7] }}</code></pre></td></tr>
+      <tr><td>route</td><td><pre><code>{{ client[8] }}</code></pre></td></tr>
+    </tbody>
+
+  </table>
+
+{% endblock %}
