@@ -6,9 +6,9 @@ This app facilitates the automated maintenence of SSH tunnels from a large numbe
 
 There are two types of machines in a tnnlr configuration, a server and a client:
 
-* **Server**: The server must have a public IP and you should have root on this machine to set up tnnlr. This is the machine that all the clients point their SSH tunnels to, and the machine that all the clients route their traffic through when SSHing to other clients in the network.
+* **Server**: The server must have a public IP and you should have root on this machine to set up tnnlr. This is the machine that all the clients point their SSH tunnels to, and the machine that all the clients route their traffic through when SSHing to other clients in the network. There is only one of these on a given network.
 
-* **Client**: The client may have any type of internet connection where port 22 is not blocked. It also must have passwordless login to a user on the server. You do not need root to set up a client, but basic utilities such as curl, autossh, and screen are required for the script to function. Most servers should have these installed already.
+* **Client**: The client may have any type of internet connection where port 22 is not blocked. It also must have passwordless login to a user on the server. You do not need root to set up a client, but basic utilities such as curl, autossh, and screen are required for the script to function. Most servers should have these installed already. You can theoretically have up to 1000 clients on a network.
 
 ## Setup
 
