@@ -83,10 +83,24 @@ def restart(hostname):
   con.commit()
   return redirect('/')
 
+@app.route("/toggle_configs/<hostname>")
+def toggle(hostname):
+  con = lite.connect('db.sqlite3')
+  update_configs = con.cursor().execute("select update_configs from Clients where hostname = '" + hostname + "'").fetchall()[0][0]
+  if (update_configs == 'true'):
+    update_configs = 'false'
+  else:
+    update_configs = 'true'
+
+  con.cursor().execute("update Clients set update_configs = '" + update_configs + "' where hostname = '" + hostname + "'")
+  con.commit()
+  return redirect('/show/' + hostname)
+
 @app.route("/show/<hostname>")
 def show(hostname):
   client = find_by_hostname(hostname)[0]
   return render_template('show.html', client=client, hostname=hostname)
+
 
 # api endpoints
 @app.route("/api/<hostname>", methods=['POST'])

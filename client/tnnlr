@@ -2,7 +2,7 @@
 
 remote=$1
 host=`hostname`
-port="5000"
+port=5000
 
 api_response=''
 
@@ -53,5 +53,5 @@ if [ $update_configs == 'true' ]
 then
   echo 'Updating SSH configs...'
   sed -i.bak '/#tnnlr/,+999 d' ~/.ssh/config
-  curl -s $remote:3000/configs?user=$user >> ~/.ssh/config
+  curl -s "$remote:5000/api/configs?user=$user" >> ~/.ssh/config
 fi
