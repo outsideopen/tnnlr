@@ -5,7 +5,7 @@
 <table class='table'>
   <thead>
     <tr>
-      <th>Hostname</th>
+      <th>Nickname</th>
       <th>Port</th>
       <th>Last Report</th>
       <th>Local IP</th>
@@ -19,7 +19,7 @@
 
   {% for c in clients %}
     <tr>
-      <td>{{ c[0] }}</td>
+      <td>{{ c[6] }}</td>
       <td>{{ c[1] }}</td>
       <td>{{ c[2] }}</td>
       <td>{{ c[3] }}</td>

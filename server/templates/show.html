@@ -9,6 +9,18 @@
 
     <tbody>
       <tr><td>Hostname</td><td>{{ client[0] }}</td></tr>
+      <tr><td>Nickname</td>
+        <td>
+          {{ client[13] }}
+          (<a onclick="$('#change-nick').toggle()">change</a>)
+          <span id="change-nick" style="display:none">
+            <form action="/set_nick/{{ hostname }}" method="post">
+              <input type="text" name="nick" value="{{ client[13] }}">
+              <button type="submit">save</button>
+            </form>
+          </span>
+        </td>
+      </tr>
       <tr><td>External IP</td><td>{{ client[1] }}</td></tr>
       <tr><td>Internal IP</td><td>{{ client[2] }}</td></tr>
       <tr><td>User</td>

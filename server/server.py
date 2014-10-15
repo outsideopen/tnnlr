@@ -21,7 +21,8 @@ extra_attrs = [
   "port",
   "restart",
   "update_configs",
-  "last_report"
+  "last_report",
+  "nickname"
 ]
 
 
@@ -57,7 +58,7 @@ def find_or_update_host(hostname, request):
     con.commit()
   else: # create
     args = map(lambda k: get_args(request, k), host_attrs)
-    command = "insert into Clients values('" + hostname + "', '" + "','".join(args) + "', '" + str(randint(15000, 16000)) + "', 'false', 'false', '" + str(time.now()) + "')"
+    command = "insert into Clients values('" + hostname + "', '" + "','".join(args) + "', '" + str(randint(15000, 16000)) + "', 'false', 'false', '" + str(time.now()) + "', '" + hostname + "')"
     con.cursor().execute(command)
     con.commit()
 
@@ -66,7 +67,7 @@ def find_or_update_host(hostname, request):
 @app.route("/")
 def index():
   con = lite.connect('db.sqlite3')
-  clients = con.cursor().execute("select hostname, port, last_report, local_ip, outside_ip, restart from Clients").fetchall()
+  clients = con.cursor().execute("select hostname, port, last_report, local_ip, outside_ip, restart, nickname from Clients").fetchall()
   return render_template('index.html', clients=clients)
 
 @app.route("/release/<hostname>")
@@ -99,8 +100,14 @@ def toggle(hostname):
 @app.route("/set_user/<hostname>", methods=['POST'])
 def set_user(hostname):
   con = lite.connect('db.sqlite3')
-  # con.cursor().execute("update Clients set user = 'assbuttons' where hostname = '" + hostname + "'")
   con.cursor().execute("update Clients set user = '" + request.form['user'] + "' where hostname = '" + hostname + "'")
+  con.commit()
+  return redirect('/show/' + hostname)
+
+@app.route("/set_nick/<hostname>", methods=['POST'])
+def set_nick(hostname):
+  con = lite.connect('db.sqlite3')
+  con.cursor().execute("update Clients set nickname = '" + request.form['nick'] + "' where hostname = '" + hostname + "'")
   con.commit()
   return redirect('/show/' + hostname)
 
@@ -127,12 +134,12 @@ def api(hostname):
 def configs():
   arr = ["#tnnlr - keep this at the bottom"]
   con = lite.connect('db.sqlite3')
-  clients = con.cursor().execute("select hostname, port from Clients")
+  clients = con.cursor().execute("select hostname, port, nickname from Clients")
   for c in clients:
-    arr.append("Host " + c[0])
+    arr.append("Host " + c[2])
     arr.append("    ProxyCommand ssh %h nc localhost " + c[1])
     arr.append("    User " + request.args.get('user', ''))
-    arr.append("    HostKeyAlias " + c[0])
+    arr.append("    HostKeyAlias " + c[2])
     arr.append("    Hostname " + request.host.split(':')[0])
     arr.append("")
 
