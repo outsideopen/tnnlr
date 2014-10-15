@@ -48,7 +48,7 @@ def find_by_hostname(hostname):
 def find_or_update_host(hostname, request):
   con = lite.connect('db.sqlite3')
   if len(find_by_hostname(hostname)) > 0: # update
-    args = map(lambda k: k + " = '" + get_args(request, k) + "'", host_attrs)
+    args = map(lambda k: k + " = '" + get_args(request, k) + "'", [x for x in host_attrs if x != 'user'])
     command = "update Clients set " + ", ".join(args)
     command += ", last_report = '" + str(time.now()) + "', restart = 'false' "
     command += "where hostname = '" + hostname + "'"
@@ -93,6 +93,14 @@ def toggle(hostname):
     update_configs = 'true'
 
   con.cursor().execute("update Clients set update_configs = '" + update_configs + "' where hostname = '" + hostname + "'")
+  con.commit()
+  return redirect('/show/' + hostname)
+
+@app.route("/set_user/<hostname>", methods=['POST'])
+def set_user(hostname):
+  con = lite.connect('db.sqlite3')
+  # con.cursor().execute("update Clients set user = 'assbuttons' where hostname = '" + hostname + "'")
+  con.cursor().execute("update Clients set user = '" + request.form['user'] + "' where hostname = '" + hostname + "'")
   con.commit()
   return redirect('/show/' + hostname)
 

@@ -11,7 +11,18 @@
       <tr><td>Hostname</td><td>{{ client[0] }}</td></tr>
       <tr><td>External IP</td><td>{{ client[1] }}</td></tr>
       <tr><td>Internal IP</td><td>{{ client[2] }}</td></tr>
-      <tr><td>User</td><td>{{ client[3] }}</td></tr>
+      <tr><td>User</td>
+        <td>
+          {{ client[3] }}
+          (<a onclick="$('#change-user').toggle()">change</a>)
+          <span id="change-user" style="display:none">
+            <form action="/set_user/{{ hostname }}" method="post">
+              <input type="text" name="user" value="{{ client[3] }}">
+              <button type="submit">save</button>
+            </form>
+          </span>
+        </td>
+      </tr>
 
       <tr><td>Port</td><td>{{ client[9] }}</td></tr>
       <tr><td>Restart</td><td>{{ client[10] }}</td></tr>
