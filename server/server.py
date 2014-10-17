@@ -56,7 +56,7 @@ def get_args(request, key):
 
 def find_by_hostname(hostname):
   con = lite.connect('db.sqlite3')
-  return con.cursor().execute("select * from Clients where hostname = '" + hostname + "'").fetchall()
+  return con.cursor().execute('select * from Clients where hostname = ?', (hostname,)).fetchall()
 
 def create_or_update_host(hostname, request):
   con = lite.connect('db.sqlite3')
@@ -70,10 +70,17 @@ def create_or_update_host(hostname, request):
     con.commit()
   else: # create
     args = map(lambda k: get_args(request, k), host_attrs)
-    command = "insert into Clients values('" + hostname + "', '" + "','".join(args) + "', '" + str(randint(TUNNEL_RANGE, TUNNEL_RANGE + 1000)) + "', 'false', 'false', '" + str(time.now()) + "', '" + hostname + "')"
+    command = "insert into Clients values('" + hostname + "', '" 
+    command += "','".join(args) + "', '" 
+    command += str(randint(TUNNEL_RANGE, TUNNEL_RANGE + 1000))
+    command += "', 'false', 'false', '" + str(time.now()) + "', '" + hostname + "')"
     con.cursor().execute(command)
     con.commit()
 
+def update_attr(hostname, attr, value):
+  con = lite.connect('db.sqlite3')
+  con.cursor().execute("update Clients set "+attr+"=? where hostname=?", (value,hostname))
+  con.commit()
 
 # Web Panel Views
 @app.route("/")
@@ -90,42 +97,32 @@ def show(hostname):
 @app.route("/release/<hostname>")
 def release(hostname):
   con = lite.connect('db.sqlite3')
-  clients = con.cursor().execute("delete from Clients where hostname = '" + hostname + "'")
+  con.cursor().execute("delete from Clients where hostname = ?", (hostname,))
   con.commit()
   return redirect('/')
 
 @app.route("/restart/<hostname>")
 def restart(hostname):
-  con = lite.connect('db.sqlite3')
-  clients = con.cursor().execute("update Clients set restart = 'true' where hostname = '" + hostname + "'")
-  con.commit()
+  update_attr(hostname, 'restart', 'true')
   return redirect('/')
 
 @app.route("/toggle_configs/<hostname>")
 def toggle(hostname):
-  con = lite.connect('db.sqlite3')
-  update_configs = con.cursor().execute("select update_configs from Clients where hostname = '" + hostname + "'").fetchall()[0][0]
-  if (update_configs == 'true'):
-    update_configs = 'false'
+  client = find_by_hostname(hostname)[0]
+  if (client[11] == 'true'):
+    update_attr(hostname, 'update_configs', 'false')
   else:
-    update_configs = 'true'
-
-  con.cursor().execute("update Clients set update_configs = '" + update_configs + "' where hostname = '" + hostname + "'")
-  con.commit()
+    update_attr(hostname, 'update_configs', 'true')
   return redirect('/show/' + hostname)
 
 @app.route("/set_user/<hostname>", methods=['POST'])
 def set_user(hostname):
-  con = lite.connect('db.sqlite3')
-  con.cursor().execute("update Clients set user = '" + request.form['user'] + "' where hostname = '" + hostname + "'")
-  con.commit()
+  update_attr(hostname, 'user', request.form['user'])
   return redirect('/show/' + hostname)
 
 @app.route("/set_nick/<hostname>", methods=['POST'])
 def set_nick(hostname):
-  con = lite.connect('db.sqlite3')
-  con.cursor().execute("update Clients set nickname = '" + request.form['nick'] + "' where hostname = '" + hostname + "'")
-  con.commit()
+  update_attr(hostname, 'nickname', request.form['nick'])
   return redirect('/show/' + hostname)
 
 
