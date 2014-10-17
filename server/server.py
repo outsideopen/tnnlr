@@ -77,10 +77,7 @@ def create_client(hostname, request):
 def update_client(hostname, request):
   con = lite.connect('db.sqlite3')
   args = map(lambda k: k + " = '" + get_args(request, k) + "'", [x for x in host_attrs if x != 'user'])
-  command = "update Clients set " + ", ".join(args)
-  command += ", last_report = '" + str(time.now()) + "', restart = 'false' "
-  command += "where hostname = '" + hostname + "'"
-  print command
+  command = "update Clients set %s, last_report = '%s', restart = 'false' where hostname = '%s'" % (", ".join(args), str(time.now()), hostname)
   con.cursor().execute(command)
   con.commit()
 
