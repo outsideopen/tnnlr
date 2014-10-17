@@ -47,7 +47,7 @@ except lite.OperationalError:
   con.cursor().execute("create table Clients(hostname UNIQUE, " + ", ".join(host_attrs) + "," + ", ".join(extra_attrs) + ");")
 
 
-# Methods
+# Helper Methods
 def get_args(request, key):
   try:
     return request.form[key]
@@ -56,49 +56,65 @@ def get_args(request, key):
 
 def find_by_hostname(hostname):
   con = lite.connect('db.sqlite3')
-  return con.cursor().execute('select * from Clients where hostname = ?', (hostname,)).fetchall()
+  return con.cursor().execute('select * from Clients where hostname = ?', (hostname,)).fetchone()
 
 def create_or_update_host(hostname, request):
+  client = find_by_hostname(hostname)
+  if client == None:
+    create_client(hostname, request)
+    return find_by_hostname(hostname)
+  else:
+    update_client(hostname, request)
+    return client
+
+def create_client(hostname, request):
   con = lite.connect('db.sqlite3')
-  if len(find_by_hostname(hostname)) > 0: # update
-    args = map(lambda k: k + " = '" + get_args(request, k) + "'", [x for x in host_attrs if x != 'user'])
-    command = "update Clients set " + ", ".join(args)
-    command += ", last_report = '" + str(time.now()) + "', restart = 'false' "
-    command += "where hostname = '" + hostname + "'"
-    print command
-    con.cursor().execute(command)
-    con.commit()
-  else: # create
-    args = map(lambda k: get_args(request, k), host_attrs)
-    command = "insert into Clients values('" + hostname + "', '" 
-    command += "','".join(args) + "', '" 
-    command += str(randint(TUNNEL_RANGE, TUNNEL_RANGE + 1000))
-    command += "', 'false', 'false', '" + str(time.now()) + "', '" + hostname + "')"
-    con.cursor().execute(command)
-    con.commit()
+  args = map(lambda k: get_args(request, k), host_attrs)
+  command = "insert into Clients values('" + hostname + "', '" 
+  command += "','".join(args) + "', '" 
+  command += str(randint(TUNNEL_RANGE, TUNNEL_RANGE + 1000))
+  command += "', 'false', 'false', '" + str(time.now()) + "', '" + hostname + "')"
+  con.cursor().execute(command)
+  con.commit()
+
+def update_client(hostname, request):
+  con = lite.connect('db.sqlite3')
+  args = map(lambda k: k + " = '" + get_args(request, k) + "'", [x for x in host_attrs if x != 'user'])
+  command = "update Clients set " + ", ".join(args)
+  command += ", last_report = '" + str(time.now()) + "', restart = 'false' "
+  command += "where hostname = '" + hostname + "'"
+  print command
+  con.cursor().execute(command)
+  con.commit()
 
 def update_attr(hostname, attr, value):
   con = lite.connect('db.sqlite3')
   con.cursor().execute("update Clients set "+attr+"=? where hostname=?", (value,hostname))
   con.commit()
 
+def all_clients():
+  con = lite.connect('db.sqlite3')
+  return con.cursor().execute("select * from Clients").fetchall()
+
+def destroy_client(hostname):
+  con = lite.connect('db.sqlite3')
+  con.cursor().execute("delete from Clients where hostname = ?", (hostname,))
+  con.commit()
+
+
 # Web Panel Views
 @app.route("/")
 def index():
-  con = lite.connect('db.sqlite3')
-  clients = con.cursor().execute("select hostname, port, last_report, local_ip, outside_ip, restart, nickname from Clients").fetchall()
-  return render_template('index.html', clients=clients)
+  return render_template('index.html', clients=all_clients())
 
 @app.route("/show/<hostname>")
 def show(hostname):
-  client = find_by_hostname(hostname)[0]
+  client = find_by_hostname(hostname)
   return render_template('show.html', client=client, hostname=hostname)
 
 @app.route("/release/<hostname>")
 def release(hostname):
-  con = lite.connect('db.sqlite3')
-  con.cursor().execute("delete from Clients where hostname = ?", (hostname,))
-  con.commit()
+  destroy_client(hostname)
   return redirect('/')
 
 @app.route("/restart/<hostname>")
@@ -108,7 +124,7 @@ def restart(hostname):
 
 @app.route("/toggle_configs/<hostname>")
 def toggle(hostname):
-  client = find_by_hostname(hostname)[0]
+  client = find_by_hostname(hostname)
   if (client[11] == 'true'):
     update_attr(hostname, 'update_configs', 'false')
   else:
@@ -129,29 +145,19 @@ def set_nick(hostname):
 # API Endpoints
 @app.route("/api/<hostname>", methods=['POST'])
 def api(hostname):
-  try:
-    client = find_by_hostname(hostname)[0]
-    create_or_update_host(hostname, request)
-  except:
-    create_or_update_host(hostname, request)
-    client = find_by_hostname(hostname)[0]
-
-  print len(client)
+  client = create_or_update_host(hostname, request)
   return client[9] + ";" + client[10] + ";" + client[3] + ";" + client[11]
 
 @app.route("/api/configs")
 def configs():
   arr = ["#tnnlr - keep this at the bottom"]
-  con = lite.connect('db.sqlite3')
-  clients = con.cursor().execute("select hostname, port, nickname from Clients")
-  for c in clients:
-    arr.append("Host " + c[2])
-    arr.append("    ProxyCommand ssh %h nc localhost " + c[1])
+  for c in all_clients():
+    arr.append("Host " + c[0])
+    arr.append("    ProxyCommand ssh %h nc localhost " + c[9])
     arr.append("    User " + request.args.get('user', ''))
-    arr.append("    HostKeyAlias " + c[2])
+    arr.append("    HostKeyAlias " + c[0])
     arr.append("    Hostname " + request.host.split(':')[0])
     arr.append("")
-
   return Response("\n".join(arr), content_type="text/plain;charset=UTF-8")
  
 # Serve Static Assets

@@ -19,14 +19,14 @@
 
   {% for c in clients %}
     <tr>
-      <td>{{ c[6] }}</td>
-      <td>{{ c[1] }}</td>
+      <td>{{ c[13] }}</td>
+      <td>{{ c[9] }}</td>
+      <td>{{ c[12] }}</td>
       <td>{{ c[2] }}</td>
-      <td>{{ c[3] }}</td>
-      <td>{{ c[4] }}</td>
+      <td>{{ c[1] }}</td>
       <td><a href="/release/{{ c[0] }}">Release Port</a></td>
       <td>
-        {% if c[5] != 'true' %}
+        {% if c[10] != 'true' %}
           <a href="/restart/{{ c[0] }}">Force Restart</a>
         {% else %}
           Restarting...
