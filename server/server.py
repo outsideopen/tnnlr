@@ -70,10 +70,7 @@ def create_or_update_host(hostname, request):
 def create_client(hostname, request):
   con = lite.connect('db.sqlite3')
   args = map(lambda k: get_args(request, k), host_attrs)
-  command = "insert into Clients values('" + hostname + "', '" 
-  command += "','".join(args) + "', '" 
-  command += str(randint(TUNNEL_RANGE, TUNNEL_RANGE + 1000))
-  command += "', 'false', 'false', '" + str(time.now()) + "', '" + hostname + "')"
+  command = "insert into Clients values('%s', '%s', '%i', 'false', 'false', '%s', '%s')" % (hostname, "','".join(args), randint(TUNNEL_RANGE, TUNNEL_RANGE + 1000), str(time.now()), hostname)
   con.cursor().execute(command)
   con.commit()
 
