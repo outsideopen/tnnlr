@@ -106,6 +106,10 @@ def show(hostname):
   client = find_by_hostname(hostname)
   return render_template('show.html', client=client, hostname=hostname)
 
+@app.route("/tnnlr.sh")
+def script():
+  return Response(render_template('tnnlr.sh', remote=request.host.split(':')[0], port=PORT), content_type="text/plain;charset=UTF-8")
+
 @app.route("/release/<hostname>")
 def release(hostname):
   destroy_client(hostname)

@@ -1,8 +1,7 @@
 #!/bin/bash
 
-remote=$1
+remote={{ remote }}
 host=`hostname`
-port=5000
 
 api_response=''
 
@@ -15,13 +14,13 @@ get_ips () {
 
 api_call () {
   get_ips
-  dfh=`df -h | sed -e 's:%::g'` # percents break ruby :)
+  dfh=`df -h`
   uptime=`w`
   free=`free -m`  
   user=`whoami`
   ifconfig=`/sbin/ifconfig`
   route=`/sbin/route`
-  api_response=`curl -s --data "route=$route&local_ip=$local_ip&outside_ip=$outside_ip&user=$user&uptime=$uptime&dfh=$dfh&free=$free&ifconfig=$ifconfig" $remote:$port/api/$host`
+  api_response=`curl -s --data "route=$route&local_ip=$local_ip&outside_ip=$outside_ip&user=$user&uptime=$uptime&dfh=$dfh&free=$free&ifconfig=$ifconfig" $remote:{{port}}/api/$host`
 }
 
 # Parse response
@@ -53,5 +52,5 @@ if [ $update_configs == 'true' ]
 then
   echo 'Updating SSH configs...'
   sed -i.bak '/#tnnlr/,+999 d' ~/.ssh/config
-  curl -s "$remote:5000/api/configs?user=$user" >> ~/.ssh/config
+  curl -s "$remote:{{port}}/api/configs?user=$user" >> ~/.ssh/config
 fi
