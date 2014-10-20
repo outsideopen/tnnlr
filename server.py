@@ -150,10 +150,10 @@ def api(hostname):
 def configs():
   arr = ["#tnnlr - keep this at the bottom"]
   for c in all_clients():
-    arr.append("Host " + c[0])
+    arr.append("Host " + c[13])
     arr.append("    ProxyCommand ssh %h nc localhost " + c[9])
     arr.append("    User " + request.args.get('user', ''))
-    arr.append("    HostKeyAlias " + c[0])
+    arr.append("    HostKeyAlias " + c[13])
     arr.append("    Hostname " + request.host.split(':')[0])
     arr.append("")
   return Response("\n".join(arr), content_type="text/plain;charset=UTF-8")
