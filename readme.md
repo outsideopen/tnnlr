@@ -41,8 +41,8 @@ You can now visit the web interface at server:5000.
 
 If you haven't already, generate an SSH key (`ssh-keygen`) and copy it to the server (`ssh-copy-id`). Ensure that curl, autossh, and screen are installed (`sudo apt-get install curl autossh screen`).
 
-Copy the client script into the directory of your choice and add it to your crontab like so:
+Copy the client script (`curl -s server:5000/tnnlr.sh`) into the directory of your choice, make it executable (`chmod +x tnnlr.sh`) and add it to your crontab like so:
 
-    */5 * * * * /path/to/script/tnnlr <server>
+    */5 * * * * /path/to/script/tnnlr.sh
 
-Where 'server' is either the IP or DNS of your server. The script will attempt to SSH as the user running the script by default, this can be configured after it has first made contact from the web interface.
+The script will attempt to SSH as the user running the script by default, but the user can be configured after it has first made contact from the web interface.
