@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block body %}
-<h1>this is tnnlr</h1>
+<h1>tnnlr</h1>
 
 <table class='table'>
   <thead>
@@ -24,7 +24,7 @@
       <td>{{ c[12] }}</td>
       <td>{{ c[2] }}</td>
       <td>{{ c[1] }}</td>
-      <td><a href="/release/{{ c[0] }}">Release Port</a></td>
+      <td><a href="/release/{{ c[0] }}">Release</a></td>
       <td>
         {% if c[10] != 'true' %}
           <a href="/restart/{{ c[0] }}">Force Restart</a>

@@ -1,8 +1,17 @@
 # tnnlr
+#### Simple SSH Tunnel Manager
+#### Alexander Standke
 
 This app facilitates the automated maintenence of SSH tunnels from a large number of machines to a central manager. Its goal is to allow machines to be always accessible via SSH regardless of their network situation. tnnlr readily bypasses firewalls and is robust enough to handle drastic network outages and changes with minimal downtime. You can even use a laptop as a client, tnnlr can take it.
 
-## Organization
+### Features
+
+ * Automatic SSH tunnel maintenance
+ * Easy client installation, just add a single script to the crontab and let tnnlr do the rest
+ * Collects basic diagnostic information such as `w`, `free`, `df -h`, `ifconfig` and others.
+ * Optional SSH Configuration updating. Simply type `ssh <hostname>` on any machine in the tunnel network to connect to another machine in the network.
+
+### Organization
 
 There are two types of machines in a tnnlr configuration, a server and a client:
 
@@ -35,7 +44,7 @@ It may be a good idea to add a keepalive script to make sure it doesn't randomly
       screen -dmS tnnlr-server /usr/bin/python /srv/tnnlr/server/server.py
     fi
 
-You can now visit the web interface at server:5000.
+You can now visit the web interface at `server:5000`. You can modify which port the web server uses (as well as which ports it assigns for SSH tunnels) by changing the values at the top of `server.py`.
 
 ### Client
 
@@ -46,3 +55,26 @@ Copy the client script (`curl -s server:5000/tnnlr.sh > tnnlr.sh`) into the dire
     */5 * * * * /path/to/script/tnnlr.sh
 
 The script will attempt to SSH as the user running the script by default, but the user can be configured after it has first made contact from the web interface.
+
+## Usage
+
+Once tnnlr is set up on a server and client(s), simply visit the web interface at server:5000. From here, you will see a list of the clients that are connected to your tunnel network.
+
+#### Home Page
+Basic information such as the most recent update time, internal and external IPs, and the tunnel port the client is assigned is available on the home page. There are three things you can do with a given client on the home page:
+
+ * **Release**: Destroys the record of the client and assigns it a new port the next time it sends a request.
+ * **Force Restart**: Causes the client to kill any existing tunnels next time it sends a request. If a client can't be reached, a restart will usually clear it up.
+ * **Show**: Links to the client's information and settings page.
+
+You can also manually generate SSH configurations for a given user (to be copied into `~/.ssh/config`), and get a link directly to the client script from the home.
+
+#### Show
+
+The show page shows detailed information on a specific client, including the results of several commonly used diagnostic commands and information that the server has collected.
+
+You can modify the client settings from this page as well:
+
+ * **Nickname**: The name shown on the homepage and used in the generation of SSH configs.
+ * **User**: The user that the client will attempt to use to connect to the server.
+ * **Update Configs**: Toggles whether or not the client script will update the SSH configs of this client. When true, the script will generate a set of SSH configurations for each client and cat them to the user's SSH config file (or update existing configuration if there are changes).
