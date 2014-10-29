@@ -3,19 +3,24 @@
 #   Alexander Standke - OutsideOpen
 #   October 2014
 
+# Configuration
+PORT = 5000           # The port for the web interface
+TUNNEL_RANGE = 15000  # The starting port, the range of usable ports is this + 1000
+
+require_login = True  # Password protect web interface - recommended
+username = 'admin'    #   For real security, use SSL/TLS as well
+password = 'password'
+
+
+# Libraries
 from flask import Flask, request, jsonify, render_template, redirect, send_from_directory, Response, request
+from flask.ext.basicauth import BasicAuth
 import sqlite3 as lite
 from datetime import datetime as time
 from random import randint
 
 app = Flask(__name__)
 
-# Configuration
-PORT = 5000           # The port for the web interface
-TUNNEL_RANGE = 15000  # The starting port, the range of usable ports is this + 1000
-
-
-# Don't change anything below here unless you know what you're doing :)
 
 # Schema for hosts
 host_attrs = [
@@ -36,6 +41,13 @@ extra_attrs = [
   "last_report",
   "nickname"
 ]
+
+
+# Authentication
+app.config['BASIC_AUTH_FORCE'] = require_login
+app.config['BASIC_AUTH_USERNAME'] = username
+app.config['BASIC_AUTH_PASSWORD'] = password
+basic_auth = BasicAuth(app)
 
 
 # Initialize Database
@@ -94,7 +106,6 @@ def destroy_client(hostname):
   con = lite.connect('db.sqlite3')
   con.cursor().execute("delete from Clients where hostname = ?", (hostname,))
   con.commit()
-
 
 # Web Panel Views
 @app.route("/")

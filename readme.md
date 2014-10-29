@@ -27,6 +27,7 @@ Clone or download this repository and save it wherever you like. Install the pre
   
     sudo apt-get install python-pip sqlite3
     pip install flask
+    pip install Flask-BasicAuth
     pip install sqlite3
 
 Then just fire up the server with `python server.py`.
