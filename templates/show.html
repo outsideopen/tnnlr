@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block body %}
-  <h1>{{ hostname }} <a href="/" class="pull-right">go home</a></h1>
+  <h1>{{ hostname }} <a href="../" class="pull-right">go home</a></h1>
 
   <table class="table">
     <thead>
@@ -14,7 +14,7 @@
           {{ client[13] }}
           (<a onclick="$('#change-nick').toggle()">change</a>)
           <span id="change-nick" style="display:none">
-            <form action="/set_nick/{{ hostname }}" method="post">
+            <form action="set_nick/{{ hostname }}" method="post">
               <input type="text" name="nick" value="{{ client[13] }}">
               <button type="submit">save</button>
             </form>
@@ -28,7 +28,7 @@
           {{ client[3] }}
           (<a onclick="$('#change-user').toggle()">change</a>)
           <span id="change-user" style="display:none">
-            <form action="/set_user/{{ hostname }}" method="post">
+            <form action="set_user/{{ hostname }}" method="post">
               <input type="text" name="user" value="{{ client[3] }}">
               <button type="submit">save</button>
             </form>
@@ -38,7 +38,7 @@
 
       <tr><td>Port</td><td>{{ client[9] }}</td></tr>
       <tr><td>Restart</td><td>{{ client[10] }}</td></tr>
-      <tr><td>Update Configs</td><td>{{ client[11] }} (<a href="/toggle_configs/{{ hostname }}">toggle</a>)</td></tr>
+      <tr><td>Update Configs</td><td>{{ client[11] }} (<a href="toggle_configs/{{ hostname }}">toggle</a>)</td></tr>
       <tr><td>Last Report</td><td>{{ client[12] }}</td></tr>
     </tbody>
 

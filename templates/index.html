@@ -24,15 +24,15 @@
       <td>{{ c[12] }}</td>
       <td>{{ c[2] }}</td>
       <td>{{ c[1] }}</td>
-      <td><a href="/release/{{ c[0] }}">Release</a></td>
+      <td><a href="release/{{ c[0] }}">Release</a></td>
       <td>
         {% if c[10] != 'true' %}
-          <a href="/restart/{{ c[0] }}">Force Restart</a>
+          <a href="restart/{{ c[0] }}">Force Restart</a>
         {% else %}
           Restarting...
         {% endif %}
       </td>
-      <td><a href="/show/{{ c[0] }}">Show</a></td>
+      <td><a href="show/{{ c[0] }}">Show</a></td>
     </tr>
   {% endfor %}
 
@@ -41,13 +41,13 @@
 </table>
 
 <div>
-<form accept-charset="UTF-8" action="/api/configs" method="get">
+<form accept-charset="UTF-8" action="api/configs" method="get">
   <label>Generate SSH configs for: 
   <input id="user" name="user" type="text"></label>
   <input name="commit" type="submit" value="Submit">
 </form>
 </div>
 
-<p><a href="/tnnlr.sh">Client Script</a></p>
+<p><a href="tnnlr.sh">Client Script</a></p>
 
 {% endblock %}
