@@ -11,6 +11,7 @@ require_login = True  # Password protect web interface - recommended
 username = 'admin'    #   For real security, use SSL/TLS as well
 password = 'password'
 
+base_uri = '/tnnlr'
 
 # Libraries
 from flask import Flask, request, jsonify, render_template, redirect, send_from_directory, Response, request
@@ -49,6 +50,7 @@ app.config['BASIC_AUTH_USERNAME'] = username
 app.config['BASIC_AUTH_PASSWORD'] = password
 basic_auth = BasicAuth(app)
 
+app.config['APPLICATION_ROOT'] = base_uri
 
 # Initialize Database
 con = lite.connect('db.sqlite3')
